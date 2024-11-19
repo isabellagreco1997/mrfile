@@ -4,10 +4,10 @@ import { UserFormData } from '../types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Initialize Supabase client
+// Initialize Supabase client with error handling
 const supabase = createClient(
-  supabaseUrl || 'http://placeholder-url.com',
-  supabaseKey || 'placeholder-key',
+  supabaseUrl || '',
+  supabaseKey || '',
   {
     auth: {
       persistSession: false
@@ -22,16 +22,13 @@ export async function submitLead(formData: UserFormData) {
     return { success: true, data: null };
   }
 
-  // In production, check if we have valid credentials
-  if (!supabaseUrl || !supabaseKey) {
-    console.error('Missing Supabase credentials');
-    return { 
-      success: false, 
-      error: 'Database configuration missing. Please check your environment variables.' 
-    };
-  }
-
   try {
+    // Validate Supabase credentials
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Missing Supabase credentials');
+    }
+
+    // Attempt to insert the lead
     const { data, error } = await supabase
       .from('leads')
       .insert([
@@ -43,17 +40,31 @@ export async function submitLead(formData: UserFormData) {
           postcode: formData.postcode,
           investment_value: formData.investmentValue,
           agreed_to_terms: formData.agreement,
-        },
+          created_at: new Date().toISOString()
+        }
       ])
       .select();
 
-    if (error) throw error;
+    if (error) {
+      // Handle specific Supabase errors
+      if (error.code === '42P01') {
+        throw new Error('Database table "leads" does not exist');
+      }
+      throw error;
+    }
+
     return { success: true, data };
   } catch (error) {
     console.error('Error submitting lead:', error);
+    
+    // Provide user-friendly error message
+    const errorMessage = error instanceof Error 
+      ? error.message
+      : 'An unexpected error occurred. Please try again.';
+
     return { 
       success: false, 
-      error: 'Failed to submit your information. Please try again.' 
+      error: errorMessage
     };
   }
 }
