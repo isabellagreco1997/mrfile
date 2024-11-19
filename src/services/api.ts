@@ -1,26 +1,34 @@
 import { createClient } from '@supabase/supabase-js';
 import { UserFormData } from '../types';
 
-const isDevelopment = import.meta.env.DEV;
-
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey, {
-  auth: {
-    persistSession: false
+// Initialize Supabase client
+const supabase = createClient(
+  supabaseUrl || 'http://placeholder-url.com',
+  supabaseKey || 'placeholder-key',
+  {
+    auth: {
+      persistSession: false
+    }
   }
-}) : null;
+);
 
 export async function submitLead(formData: UserFormData) {
-  // In development, skip database submission
-  if (isDevelopment) {
+  // In development mode, simulate successful submission
+  if (import.meta.env.DEV) {
+    console.log('Development mode: Simulating successful submission');
     return { success: true, data: null };
   }
 
-  if (!supabase) {
-    console.error('Supabase client not initialized');
-    return { success: false, error: 'Database configuration missing' };
+  // In production, check if we have valid credentials
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Missing Supabase credentials');
+    return { 
+      success: false, 
+      error: 'Database configuration missing. Please check your environment variables.' 
+    };
   }
 
   try {
@@ -43,6 +51,9 @@ export async function submitLead(formData: UserFormData) {
     return { success: true, data };
   } catch (error) {
     console.error('Error submitting lead:', error);
-    return { success: false, error };
+    return { 
+      success: false, 
+      error: 'Failed to submit your information. Please try again.' 
+    };
   }
 }
