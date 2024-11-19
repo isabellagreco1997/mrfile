@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900;
+  }
+}
+
+@layer components {
+  input[type="range"] {
+    @apply appearance-none bg-gray-200 h-2 rounded-lg;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb {
+    @apply appearance-none w-6 h-6 bg-blue-600 rounded-full cursor-pointer shadow-lg;
+    -webkit-appearance: none;
+  }
+  
+  input[type="range"]::-moz-range-thumb {
+    @apply w-6 h-6 bg-blue-600 rounded-full cursor-pointer border-none shadow-lg;
+  }
+  
+  input[type="range"]:focus {
+    @apply outline-none;
+  }
+  
+  input[type="range"]:focus::-webkit-slider-thumb {
+    @apply ring-4 ring-blue-200;
+  }
+  
+  input[type="range"]:focus::-moz-range-thumb {
+    @apply ring-4 ring-blue-200;
+  }
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+}
