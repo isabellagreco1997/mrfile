@@ -18,8 +18,13 @@ function App() {
     phone: '',
     postcode: '',
     agreement: false,
-    investmentValue: 250000,
+    investmentValue: 250000, // Default value
   });
+
+  // Debug log for investment value changes
+  React.useEffect(() => {
+    console.log('Investment value updated:', formData.investmentValue);
+  }, [formData.investmentValue]);
 
   const handleNext = () => {
     setCurrentStep((prev) => prev + 1);

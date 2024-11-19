@@ -13,6 +13,9 @@ export default function FormStep({ formData, setFormData, onNext }: FormStepProp
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Log the current form data before submission
+    console.log('Submitting form with data:', formData);
+    
     const result = await submitLead(formData);
     
     if (result.success) {
@@ -23,7 +26,7 @@ export default function FormStep({ formData, setFormData, onNext }: FormStepProp
       }
       onNext();
     } else {
-      toast.error('There was an error submitting your information. Please try again.');
+      toast.error(result.error || 'There was an error submitting your information. Please try again.');
     }
   };
 
