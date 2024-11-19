@@ -4,7 +4,6 @@ import { UserFormData } from '../types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Initialize Supabase client with error handling
 const supabase = createClient(
   supabaseUrl || '',
   supabaseKey || '',
@@ -28,6 +27,9 @@ export async function submitLead(formData: UserFormData) {
       throw new Error('Missing Supabase credentials');
     }
 
+    // Ensure investment value is an integer
+    const investmentValue = Math.round(formData.investmentValue);
+
     // Attempt to insert the lead
     const { data, error } = await supabase
       .from('leads')
@@ -38,29 +40,24 @@ export async function submitLead(formData: UserFormData) {
           email: formData.email,
           phone: formData.phone,
           postcode: formData.postcode,
-          investment_value: formData.investmentValue,
-          agreed_to_terms: formData.agreement,
-          created_at: new Date().toISOString()
+          investment_value: investmentValue,
+          agreed_to_terms: formData.agreement
         }
       ])
       .select();
 
     if (error) {
-      // Handle specific Supabase errors
-      if (error.code === '42P01') {
-        throw new Error('Database table "leads" does not exist');
-      }
-      throw error;
+      console.error('Supabase error:', error);
+      throw new Error(error.message);
     }
 
     return { success: true, data };
   } catch (error) {
     console.error('Error submitting lead:', error);
     
-    // Provide user-friendly error message
     const errorMessage = error instanceof Error 
       ? error.message
-      : 'An unexpected error occurred. Please try again.';
+      : 'An unexpected error occurred while saving your information.';
 
     return { 
       success: false, 
