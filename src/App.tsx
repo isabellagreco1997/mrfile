@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import LandingPage from './components/LandingPage';
 import FormStep from './components/FormStep';
 import SliderStep from './components/SliderStep';
@@ -23,22 +24,22 @@ function App() {
   });
 
   React.useEffect(() => {
-    console.log('Investment value updated:', formData.investmentValue);
-  }, [formData.investmentValue]);
+    console.log('Form data updated:', formData);
+  }, [formData]);
 
   const handleNext = async (isSliderStep = false) => {
     if (isSliderStep) {
-      // Submit the complete form data after the slider step
-      console.log('Submitting complete form data:', formData);
+      console.log('Submitting final form data:', formData);
       const result = await submitLead(formData);
       
       if (result.success) {
+        console.log('Lead submitted successfully');
         setCurrentStep((prev) => prev + 1);
       } else {
+        console.error('Failed to submit lead:', result.error);
         toast.error(result.error || 'Failed to submit your information. Please try again.');
       }
     } else {
-      // Just move to next step without submitting
       setCurrentStep((prev) => prev + 1);
     }
   };

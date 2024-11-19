@@ -15,16 +15,19 @@ const supabase = createClient(
 );
 
 export async function submitLead(formData: UserFormData) {
-  // In development mode, log the data being sent
-  console.log('Submitting lead with investment value:', formData.investmentValue);
-
-  // In development mode, simulate successful submission
-  if (import.meta.env.DEV) {
-    console.log('Development mode: Simulating successful submission');
-    return { success: true, data: null };
-  }
-
   try {
+    // Log the incoming data
+    console.log('Submitting lead data:', {
+      ...formData,
+      investmentValue: formData.investmentValue
+    });
+
+    // In development mode, simulate successful submission
+    if (import.meta.env.DEV) {
+      console.log('Development mode: Simulating successful submission');
+      return { success: true, data: null };
+    }
+
     // Validate Supabase credentials
     if (!supabaseUrl || !supabaseKey) {
       throw new Error('Missing Supabase credentials');
@@ -35,10 +38,9 @@ export async function submitLead(formData: UserFormData) {
     
     // Validate investment value
     if (isNaN(investmentValue) || investmentValue < 250000 || investmentValue > 2000000) {
+      console.error('Invalid investment value:', investmentValue);
       throw new Error('Invalid investment value');
     }
-
-    console.log('Processed investment value:', investmentValue);
 
     // Create the lead data object
     const leadData = {
@@ -51,9 +53,9 @@ export async function submitLead(formData: UserFormData) {
       agreed_to_terms: formData.agreement
     };
 
-    console.log('Sending lead data to Supabase:', leadData);
+    console.log('Sending to Supabase:', leadData);
 
-    // Attempt to insert the lead
+    // Insert the lead
     const { data, error } = await supabase
       .from('leads')
       .insert([leadData])
@@ -61,21 +63,16 @@ export async function submitLead(formData: UserFormData) {
 
     if (error) {
       console.error('Supabase error:', error);
-      throw new Error(error.message);
+      throw error;
     }
 
-    console.log('Successfully saved lead with data:', data);
+    console.log('Successfully saved lead:', data);
     return { success: true, data };
   } catch (error) {
     console.error('Error submitting lead:', error);
-    
-    const errorMessage = error instanceof Error 
-      ? error.message
-      : 'An unexpected error occurred while saving your information.';
-
     return { 
       success: false, 
-      error: errorMessage
+      error: error instanceof Error ? error.message : 'Failed to submit lead'
     };
   }
 }

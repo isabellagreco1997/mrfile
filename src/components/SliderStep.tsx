@@ -9,7 +9,21 @@ type SliderStepProps = {
 
 export default function SliderStep({ formData, setFormData, onNext }: SliderStepProps) {
   const formatValue = (value: number) => {
-    return `£${(value / 1000).toFixed(0)}k`;
+    return value >= 2000000 ? '£2M+' : `£${(value / 1000).toFixed(0)}k`;
+  };
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    console.log('Slider value changed to:', value);
+    setFormData((prev) => ({
+      ...prev,
+      investmentValue: value
+    }));
+  };
+
+  const handleContinue = () => {
+    console.log('Submitting with investment value:', formData.investmentValue);
+    onNext();
   };
 
   return (
@@ -34,12 +48,7 @@ export default function SliderStep({ formData, setFormData, onNext }: SliderStep
               max="2000000"
               step="50000"
               value={formData.investmentValue}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  investmentValue: parseInt(e.target.value),
-                }))
-              }
+              onChange={handleSliderChange}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
             <div className="text-center mt-4">
@@ -50,7 +59,7 @@ export default function SliderStep({ formData, setFormData, onNext }: SliderStep
           </div>
 
           <button
-            onClick={onNext}
+            onClick={handleContinue}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
           >
             Continue →
