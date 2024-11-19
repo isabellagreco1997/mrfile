@@ -8,9 +8,10 @@ import StepIndicator from './components/StepIndicator';
 import Footer from './components/Footer';
 import Nav from './components/Nav';
 import { UserFormData } from './types';
+import { submitLead } from './services/api';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState(-1); // -1 represents landing page
+  const [currentStep, setCurrentStep] = useState(-1);
   const [formData, setFormData] = useState<UserFormData>({
     firstName: '',
     lastName: '',
@@ -18,16 +19,28 @@ function App() {
     phone: '',
     postcode: '',
     agreement: false,
-    investmentValue: 250000, // Default value
+    investmentValue: 250000,
   });
 
-  // Debug log for investment value changes
   React.useEffect(() => {
     console.log('Investment value updated:', formData.investmentValue);
   }, [formData.investmentValue]);
 
-  const handleNext = () => {
-    setCurrentStep((prev) => prev + 1);
+  const handleNext = async (isSliderStep = false) => {
+    if (isSliderStep) {
+      // Submit the complete form data after the slider step
+      console.log('Submitting complete form data:', formData);
+      const result = await submitLead(formData);
+      
+      if (result.success) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        toast.error(result.error || 'Failed to submit your information. Please try again.');
+      }
+    } else {
+      // Just move to next step without submitting
+      setCurrentStep((prev) => prev + 1);
+    }
   };
 
   const handleGetStarted = () => {
@@ -49,7 +62,7 @@ function App() {
               <FormStep
                 formData={formData}
                 setFormData={setFormData}
-                onNext={handleNext}
+                onNext={() => handleNext(false)}
               />
             )}
             
@@ -57,7 +70,7 @@ function App() {
               <SliderStep
                 formData={formData}
                 setFormData={setFormData}
-                onNext={handleNext}
+                onNext={() => handleNext(true)}
               />
             )}
             

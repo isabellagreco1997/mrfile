@@ -1,7 +1,5 @@
 import React from 'react';
 import { UserFormData } from '../types';
-import { submitLead } from '../services/api';
-import toast from 'react-hot-toast';
 
 type FormStepProps = {
   formData: UserFormData;
@@ -10,24 +8,10 @@ type FormStepProps = {
 };
 
 export default function FormStep({ formData, setFormData, onNext }: FormStepProps) {
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Log the current form data before submission
-    console.log('Submitting form with data:', formData);
-    
-    const result = await submitLead(formData);
-    
-    if (result.success) {
-      if (import.meta.env.DEV) {
-        toast.success('Development mode: Skipping database submission');
-      } else {
-        toast.success('Information submitted successfully!');
-      }
-      onNext();
-    } else {
-      toast.error(result.error || 'There was an error submitting your information. Please try again.');
-    }
+    console.log('Form step completed with data:', formData);
+    onNext();
   };
 
   return (
