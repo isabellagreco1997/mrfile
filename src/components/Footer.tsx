@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p className="text-base text-gray-600 mb-4">
-            Join the millions of investors worldwide who trust Fisher Investments
+            Join thousands of investors worldwide who trust our expertise
           </p>
           <div className="flex justify-center space-x-6">
             <a href="#" className="text-sm text-gray-500 hover:text-gray-900">
@@ -20,7 +20,7 @@ export default function Footer() {
             </a>
           </div>
           <p className="mt-4 text-xs text-gray-500">
-            © {new Date().getFullYear()} Fisher Investments. All rights reserved.
+            © {new Date().getFullYear()} Mr Fire. All rights reserved.
           </p>
         </div>
       </div>

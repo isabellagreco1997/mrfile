@@ -50,6 +50,17 @@ export default function ThankYouStep() {
         </div>
       </div>
 
+      <div className="mt-8 text-center">
+        <p className="text-gray-600">
+          If you have any questions, feel free to contact us at{' '}
+          <a
+            href="mailto:support@mrfire.com"
+            className="text-blue-600 hover:text-blue-800"
+          >
+            support@mrfire.com
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

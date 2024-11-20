@@ -122,7 +122,7 @@ export default function FormStep({ formData, setFormData, onNext }: FormStepProp
           </div>
           <label htmlFor="agreement" className="ml-3 text-sm text-gray-600">
             By ticking this box, I understand I will receive a retirement guide
-            without cost and ongoing insights from Fisher Investments UK.
+            without cost and ongoing insights from Mr Fire.
           </label>
         </div>
 
@@ -140,7 +140,7 @@ export default function FormStep({ formData, setFormData, onNext }: FormStepProp
       </form>
 
       <p className="text-sm text-gray-600 text-center mt-6">
-        Join the millions of investors worldwide who have requested guides and
+        Join thousands of investors worldwide who have requested guides and
         ongoing insights.
       </p>
     </div>
