@@ -48,10 +48,23 @@ function App() {
     setCurrentStep(0);
   };
 
+  const handleLogoClick = () => {
+    setCurrentStep(-1);
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      postcode: '',
+      agreement: false,
+      investmentValue: 250000,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Toaster position="top-center" />
-      <Nav />
+      <Nav onLogoClick={handleLogoClick} />
       <main className="flex-grow">
         {currentStep === -1 ? (
           <LandingPage onGetStarted={handleGetStarted} />
