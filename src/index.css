@@ -4,22 +4,34 @@
 
 @layer base {
   body {
-    @apply antialiased text-gray-900;
+    @apply antialiased text-luxury-slate bg-luxury-pearl font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
   }
 }
 
 @layer components {
+  .luxury-heading {
+    @apply font-display tracking-luxury;
+  }
+
+  .luxury-subheading {
+    @apply font-sans uppercase tracking-widest text-sm;
+  }
+
   input[type="range"] {
-    @apply appearance-none bg-gray-200 h-2 rounded-lg;
+    @apply appearance-none bg-luxury-champagne h-2 rounded-lg;
   }
   
   input[type="range"]::-webkit-slider-thumb {
-    @apply appearance-none w-6 h-6 bg-blue-600 rounded-full cursor-pointer shadow-lg;
+    @apply appearance-none w-6 h-6 bg-luxury-burgundy rounded-full cursor-pointer shadow-lg;
     -webkit-appearance: none;
   }
   
   input[type="range"]::-moz-range-thumb {
-    @apply w-6 h-6 bg-blue-600 rounded-full cursor-pointer border-none shadow-lg;
+    @apply w-6 h-6 bg-luxury-burgundy rounded-full cursor-pointer border-none shadow-lg;
   }
   
   input[type="range"]:focus {
@@ -27,14 +39,14 @@
   }
   
   input[type="range"]:focus::-webkit-slider-thumb {
-    @apply ring-4 ring-blue-200;
+    @apply ring-4 ring-luxury-champagne;
   }
   
   input[type="range"]:focus::-moz-range-thumb {
-    @apply ring-4 ring-blue-200;
+    @apply ring-4 ring-luxury-champagne;
   }
 }
 
 .bg-gradient {
-  background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #F7E7CE 0%, #FFFDD0 100%);
 }
